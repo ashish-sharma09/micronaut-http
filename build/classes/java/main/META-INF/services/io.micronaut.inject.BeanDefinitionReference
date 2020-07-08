@@ -1,0 +1,7 @@
+micronaut.http.$TokenIssuerDefinitionClass
+micronaut.http.$AuthenticateFilterDefinitionClass
+micronaut.http.$ServiceClient$InterceptedDefinitionClass
+micronaut.http.$AuthClient$InterceptedDefinitionClass
+micronaut.http.$RequestValidatorDefinitionClass
+micronaut.http.$AuthValidatorDefinitionClass
+micronaut.http.$StatusControllerDefinitionClass
