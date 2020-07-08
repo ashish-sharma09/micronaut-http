@@ -56,7 +56,7 @@ class StatusIntegrationSpec extends Specification {
         context.stop()
     }
 
-    def "Micronaut HTTP client does not time out during multiple concurrent requests handling"() {
+    def "Micronaut HTTP client should not time out during multiple concurrent requests handling"() {
         given: "all external services are running"
         identityRequestValidationMock()
         identityRequestIssueMock()
