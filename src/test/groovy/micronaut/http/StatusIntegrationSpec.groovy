@@ -19,6 +19,8 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 
 class StatusIntegrationSpec extends Specification {
 
+    def CONCURRENT_REQUESTS_COUNT = 20
+
     private static final String CLIENT_TOKEN = "client-token"
     private static final String CLIENT_ID = "someClientID"
     private static final String ACCESS_TOKEN = "someAccessToken"
@@ -58,15 +60,14 @@ class StatusIntegrationSpec extends Specification {
 
     def "Micronaut HTTP client should not time out during multiple concurrent requests handling"() {
         given: "all external services are running"
-        identityRequestValidationMock()
-        identityRequestIssueMock()
-        serviceRequestMock("requestId")
+        authRequestValidationMock()
+        authIssueTokenMock()
+        serviceRequestMock()
 
         when: 'requests are issued concurrently'
-        def threadCount = 20
-        def fixedThreadPool = Executors.newFixedThreadPool(threadCount)
+        def fixedThreadPool = Executors.newFixedThreadPool(CONCURRENT_REQUESTS_COUNT)
         List<Future<Response>> futures = []
-        threadCount.times {
+        CONCURRENT_REQUESTS_COUNT.times {
             futures.add(fixedThreadPool.submit(new Callable<Response>() {
                 @Override
                 Response call() throws Exception {
@@ -84,7 +85,7 @@ class StatusIntegrationSpec extends Specification {
     def serviceRequestMock(String id) {
         serviceServer.stubFor(
             get(
-                    urlEqualTo("/details/$id")
+                    urlEqualTo("/details/requestId")
             )
             .withHeader("Authorization", equalTo("Bearer $ACCESS_TOKEN"))
             .willReturn(aResponse()
@@ -101,7 +102,7 @@ class StatusIntegrationSpec extends Specification {
         )
     }
 
-    def identityRequestIssueMock() {
+    def authIssueTokenMock() {
 
         def requestJson = JsonOutput.toJson([
                 client_id       : "$CLIENT_ID"
@@ -126,7 +127,7 @@ class StatusIntegrationSpec extends Specification {
         )
     }
 
-    def identityRequestValidationMock() {
+    def authRequestValidationMock() {
         def requestJson = JsonOutput.toJson([token: CLIENT_TOKEN])
 
         authServer.stubFor(
