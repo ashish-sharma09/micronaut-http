@@ -1,6 +1,7 @@
 package micronaut.http;
 
 import io.micronaut.context.annotation.Property;
+import io.reactivex.Single;
 
 import javax.inject.Singleton;
 
@@ -18,7 +19,7 @@ public class TokenIssuer {
         this.clientId = clientId;
     }
 
-    public Token retrieveToken() {
+    public Single<Token> retrieveToken() {
         return authClient.retrieveToken(new AuthRequest(clientId));
     }
 }

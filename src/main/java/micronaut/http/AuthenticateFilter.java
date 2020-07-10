@@ -21,6 +21,8 @@ public class AuthenticateFilter implements HttpClientFilter {
 
     @Override
     public Publisher<? extends HttpResponse<?>> doFilter(MutableHttpRequest<?> request, ClientFilterChain chain) {
-        return chain.proceed(request.bearerAuth(tokenIssuer.retrieveToken().getAccessToken()));
+        return tokenIssuer.retrieveToken()
+            .map(token -> request.bearerAuth(token.getAccessToken()))
+            .flatMapPublisher(chain::proceed);
     }
 }

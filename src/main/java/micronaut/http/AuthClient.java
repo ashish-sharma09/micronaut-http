@@ -5,6 +5,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.client.annotation.Client;
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 
 @Client("${auth.url}")
 public interface AuthClient {
@@ -16,5 +17,5 @@ public interface AuthClient {
     );
 
     @Post(value = "/issue/token", consumes = "application/json")
-    Token retrieveToken(@Body AuthRequest issueTokenRequest);
+    Single<Token> retrieveToken(@Body AuthRequest issueTokenRequest);
 }
