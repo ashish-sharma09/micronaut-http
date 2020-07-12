@@ -1,11 +1,11 @@
 package micronaut.http;
 
-import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.annotation.Value;
 import io.micronaut.core.async.annotation.SingleResult;
 import io.micronaut.core.order.Ordered;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.token.validator.TokenValidator;
+import io.reactivex.schedulers.Schedulers;
 import org.reactivestreams.Publisher;
 
 import javax.inject.Inject;
@@ -30,6 +30,7 @@ public class AuthValidator implements TokenValidator {
     public Publisher<Authentication> validateToken(String token) {
         return authClient
                 .validateToken(new ValidateTokenRequest(token), clientId)
+                .observeOn(Schedulers.io())
                 .filter(ValidateTokenResponse::isTokenValid)
                 .map(ValidateTokenResponse::asAuthentication)
                 .doOnError(this::handle);

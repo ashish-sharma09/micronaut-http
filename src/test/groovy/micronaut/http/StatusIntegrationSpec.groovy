@@ -19,7 +19,7 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 
 class StatusIntegrationSpec extends Specification {
 
-    def CONCURRENT_REQUESTS_COUNT = 20
+    def CONCURRENT_REQUESTS_COUNT = 50
 
     private static final String CLIENT_TOKEN = "client-token"
     private static final String CLIENT_ID = "someClientID"
