@@ -1,8 +1,7 @@
 micronaut:
-    security:
-        enabled: "true"
-        token:
-            jwt:
-                enabled: "true"
-                bearer:
-                    enabled: "true"
+    executors:
+        io:
+            type: fixed
+            nThreads: 20
+    server:
+        port: 8086

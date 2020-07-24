@@ -4,21 +4,20 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
-@Secured(SecurityRule.IS_AUTHENTICATED)
 @Controller
 public class StatusController {
-    private final RequestValidator requestValidator;
 
-    @Inject
-    public StatusController(RequestValidator requestValidator) {
-        this.requestValidator = requestValidator;
-    }
+    private Logger logger = LoggerFactory.getLogger(NonBlockingStatusController.class);
 
     @Get("/status")
-    String status() {
-        return requestValidator.isValid("requestId") ? "valid" : "invalid";
+    String status() throws InterruptedException {
+//        logger.info("Blocking status thread: " + Thread.currentThread().getName());
+        Thread.sleep(200);
+        return "OK -> " + Thread.currentThread().getName();
     }
 }
